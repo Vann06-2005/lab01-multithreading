@@ -1,0 +1,15 @@
+# Build output
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+
+# Challenge outputs
+data/
+result.csv
+
+# OS
+.DS_Store
