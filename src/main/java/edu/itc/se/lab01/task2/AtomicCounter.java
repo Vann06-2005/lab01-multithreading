@@ -1,15 +1,17 @@
 package edu.itc.se.lab01.task2;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 public class AtomicCounter implements Counter {
-    // TODO
+    private final AtomicLong count = new AtomicLong();
 
     @Override
     public void increment() {
-        // TODO
+        count.incrementAndGet();
     }
 
     @Override
     public long get() {
-        return 0; // TODO
+        return count.get();
     }
 }

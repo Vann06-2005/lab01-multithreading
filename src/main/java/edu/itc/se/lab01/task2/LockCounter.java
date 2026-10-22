@@ -1,15 +1,28 @@
 package edu.itc.se.lab01.task2;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 public class LockCounter implements Counter {
-    // TODO
+    private final ReentrantLock lock = new ReentrantLock();
+    private long count;
 
     @Override
     public void increment() {
-        // TODO
+        lock.lock();
+        try {
+            count++;
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Override
     public long get() {
-        return 0; // TODO
+        lock.lock();
+        try {
+            return count;
+        } finally {
+            lock.unlock();
+        }
     }
 }

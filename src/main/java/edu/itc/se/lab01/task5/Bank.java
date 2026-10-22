@@ -1,6 +1,11 @@
 package edu.itc.se.lab01.task5;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
+import java.lang.management.ThreadMXBean;
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 // STARTER CODE (DELIBERATELY BROKEN) – it is supposed to deadlock
 public class Bank {
@@ -25,7 +30,7 @@ public class Bank {
         Account[] accounts = new Account[4];
         for (int i = 0; i < accounts.length; i++) accounts[i] = new Account(i, 1_000);
 
-        // TODO: watchdog daemon thread using ManagementFactory.getThreadMXBean().findDeadlockedThreads()
+        startWatchdog();
 
         Thread[] workers = new Thread[8];
         for (int w = 0; w < workers.length; w++) {
@@ -42,5 +47,34 @@ public class Bank {
         for (Thread t : workers) t.join();
         long total = 0; for (Account a : accounts) total += a.balance();
         System.out.println("total = " + total + " (expected 4000)");   // never printed – deadlock
+    }
+
+    // Daemon thread: checks for deadlocks every second and names the threads involved
+    static void startWatchdog() {
+        Thread watchdog = new Thread(() -> {
+            ThreadMXBean mx = ManagementFactory.getThreadMXBean();
+            String lastReport = "";
+            while (true) {
+                long[] ids = mx.findDeadlockedThreads();
+                if (ids != null) {
+                    String names = Arrays.stream(mx.getThreadInfo(ids))
+                            .map(ThreadInfo::getThreadName)
+                            .sorted()
+                            .collect(Collectors.joining(", "));
+                    if (!names.equals(lastReport)) {
+                        System.out.println("[watchdog] DEADLOCK detected between: " + names);
+                        lastReport = names;
+                    }
+                }
+                try {
+                    Thread.sleep(1_000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+            }
+        }, "watchdog");
+        watchdog.setDaemon(true);
+        watchdog.start();
     }
 }

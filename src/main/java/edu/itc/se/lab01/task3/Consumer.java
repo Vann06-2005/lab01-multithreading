@@ -1,5 +1,6 @@
 package edu.itc.se.lab01.task3;
 
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Consumer implements Runnable {
@@ -13,7 +14,21 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
-        // TODO: take orders, sleep 5–30 ms, print "<name> processed <order>",
-        //       increment 'processed'; stop on a poison pill
+        String name = Thread.currentThread().getName();
+        var rnd = ThreadLocalRandom.current();
+        try {
+            while (true) {
+                Order order = queue.take();
+                if (order.isPoison()) {
+                    System.out.println(name + " received poison pill, stopping");
+                    return;
+                }
+                Thread.sleep(rnd.nextInt(5, 31));
+                System.out.println(name + " processed " + order);
+                processed.incrementAndGet();
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

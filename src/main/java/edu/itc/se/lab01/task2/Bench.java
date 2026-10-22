@@ -26,6 +26,9 @@ public class Bench {
 
     public static void main(String[] args) throws InterruptedException {
         run("UnsafeCounter", new UnsafeCounter());
-        // TODO: SynchronizedCounter, LockCounter, AtomicCounter, LongAdderCounter
+        run("SynchronizedCounter", new SynchronizedCounter());
+        run("LockCounter", new LockCounter());
+        run("AtomicCounter", new AtomicCounter());
+        run("LongAdderCounter", new LongAdderCounter());
     }
 }

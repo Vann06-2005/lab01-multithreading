@@ -1,8 +1,8 @@
 package edu.itc.se.lab01.task3;
 
+// Same Producer/Consumer, but backed by ArrayBlockingQueue instead of BoundedBuffer
 public class Main2 {
     public static void main(String[] args) throws InterruptedException {
-        OrderQueue queue = new BlockingOrderQueue(5);
-        // TODO: 2 producers × 50 orders, 3 consumers; join all; check total processed == 100
+        Main.run(new BlockingOrderQueue(Main.CAPACITY));
     }
 }

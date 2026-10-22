@@ -1,7 +1,7 @@
 package edu.itc.se.lab01.task1;
 
 /*
- * start() asks the JVM to create a NEW thread that runwws run() concurrently,
+ * start() asks the JVM to create a NEW thread that runs run() concurrently,
  * so the main thread keeps going ("all launched" prints right away and the
  * countdowns interleave).
  * run() is an ordinary method call: it executes on the MAIN thread, so each

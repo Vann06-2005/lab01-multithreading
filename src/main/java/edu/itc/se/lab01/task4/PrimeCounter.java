@@ -13,6 +13,6 @@ public class PrimeCounter implements Callable<Long> {
 
     @Override
     public Long call() {
-        return 0L; // TODO
+        return Main.countPrimes(from, to);
     }
 }
