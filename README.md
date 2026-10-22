@@ -201,6 +201,31 @@ How it works:
   - `--timeout 1` on 5 000 files stops in under 3 s with a partial result.
 - `--workers N` is an extra option, added for the scaling table below.
 
+**`[PARTIAL]` results** (terminal captures, 1 worker so the run lasts long enough to interrupt):
+
+```
+$ java -cp target/classes edu.itc.se.lab01.challenge.WordCount ./data --top 3 --timeout 1 --workers 1
+[0.5s] files 72/90  words 3,460,453  6,793,931 w/s  top: the(427,813) and(214,938) of(143,326)
+[1.0s] files 145/163  words 7,273,760  7,211,728 w/s  top: the(889,888) and(444,811) of(296,791)
+[1.0s] deadline reached – stopping
+[PARTIAL] files=147 words=7,350,000 elapsed=1.02s mode=platform(1)
+ rank  word              count     share
+    1  the             898,980   12.23 %
+    2  and             449,195    6.11 %
+    3  of              299,648    4.08 %
+result.csv written
+
+$ java -cp target/classes edu.itc.se.lab01.challenge.WordCount ./data --top 3 --workers 1
+[0.5s] files 78/96  words 3,766,224  7,417,076 w/s  top: the(464,785) and(233,093) of(155,439)
+^C
+[PARTIAL] files=87 words=4,350,000 elapsed=0.67s mode=platform(1)
+ rank  word              count     share
+    1  the             532,058   12.23 %
+    2  and             265,890    6.11 %
+    3  of              177,186    4.07 %
+result.csv written
+```
+
 **Scaling** (200 files, 10 M words, median of 3 runs):
 
 | Workers | Elapsed (s) |
